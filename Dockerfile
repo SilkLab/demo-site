@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f package-lock.json ]; then npm install; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
@@ -22,6 +22,13 @@ RUN \
 # Rebuild the source code only when needed
 FROM base AS builder
 WORKDIR /app
+
+# Add these lines at the beginning of the builder stage
+ARG PAYLOAD_SECRET
+ENV PAYLOAD_SECRET ${PAYLOAD_SECRET}
+ARG DATABASE_URI
+ENV DATABASE_URI ${DATABASE_URI}
+
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
@@ -59,6 +66,7 @@ RUN chown nextjs:nodejs .next
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/rds-ssl-certs.pem ./rds-ssl-certs.pem
 
 USER nextjs
 
