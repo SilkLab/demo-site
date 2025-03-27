@@ -44,7 +44,5 @@ jobs:
             --platform linux/amd64 \
             -t $REGISTRY/$REPOSITORY:$IMAGE_TAG \
             -t $REGISTRY/$REPOSITORY:latest \
-            -t silklab/demo-site:latest .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
           docker push $REGISTRY/$REPOSITORY:latest
-          docker push silklab/demo-site:latest 
