@@ -43,6 +43,5 @@ jobs:
             NEXT_PUBLIC_SERVER_URL=${{ secrets.NEXT_PUBLIC_SERVER_URL }}
             CDN_URL=${{ secrets.CDN_URL }}
           tags: |
-            silklab/demo-site:latest
             535002875481.dkr.ecr.us-east-1.amazonaws.com/silklab/demo-site:${{ steps.git-sha.outputs.sha }}
             535002875481.dkr.ecr.us-east-1.amazonaws.com/silklab/demo-site:latest 
