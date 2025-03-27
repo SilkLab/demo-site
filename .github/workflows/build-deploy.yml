@@ -37,7 +37,6 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64
-          provenance: false
           build-args: |
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
             DATABASE_URI=${{ secrets.DATABASE_URI }}
